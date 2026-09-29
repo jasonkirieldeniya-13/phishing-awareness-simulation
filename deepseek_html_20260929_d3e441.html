@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log on to NetBank - Cybersecurity Training</title>
+    <style>
+        /* CSS Reset and Fonts */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Layout Split */
+        .left-panel {
+            flex: 1;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            padding: 60px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .right-panel {
+            flex: 1;
+            background-color: #ffd500;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        /* Right Panel Background Shapes */
+        .right-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        }
+
+        .right-panel::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 150%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.2) 50%, transparent 60%);
+            transform: rotate(-15deg);
+            pointer-events: none;
+        }
+
+        /* Left Panel Content */
+        .logo {
+            width: 40px;
+            height: 40px;
+            background-color: #ffd500;
+            margin-bottom: 20px;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 400;
+            margin-bottom: 40px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 16px;
+            background-color: transparent;
+            border: 1px solid #555;
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #ffd500;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .show-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ffffff;
+            font-size: 14px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            max-width: 450px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-top: 4px;
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: #ffd500;
+            cursor: pointer;
+        }
+
+        .checkbox-label {
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        .checkbox-label span {
+            display: block;
+            font-size: 14px;
+            color: #a0a0a0;
+            margin-top: 4px;
+        }
+
+        .login-btn {
+            background-color: #ffffff;
+            color: #1a1a1a;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-bottom: 30px;
+        }
+
+        .login-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: #a0a0a0;
+            max-width: 450px;
+            line-height: 1.6;
+        }
+
+        .footer-text a {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        /* Right Panel Content (Mock UI) */
+        .mock-ui {
+            background-color: #ffffff;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+            transition: transform 0.5s;
+        }
+
+        .mock-ui:hover {
+            transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+        }
+
+        .mock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .mock-logo {
+            width: 20px;
+            height: 20px;
+            background-color: #ffd500;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+
+        .mock-nav {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .mock-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .mock-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .mock-row:last-child {
+            border-bottom: none;
+        }
+
+        .mock-amount {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .mock-highlight {
+            background-color: #ffd500;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .right-panel-text {
+            margin-top: 40px;
+            max-width: 500px;
+            text-align: left;
+            z-index: 10;
+        }
+
+        .right-panel-text h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .right-panel-text p {
+            font-size: 16px;
+            color: #1a1a1a;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .right-panel-text a {
+            color: #1a1a1a;
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        /* Training Notice Banner */
+        .training-notice {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #d32f2f;
+            color: #ffffff;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            z-index: 100;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        /* Warning Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border-top: 10px solid #d32f2f;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-content h2 {
+            color: #d32f2f;
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .modal-content p {
+            color: #333;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .modal-content ul {
+            text-align: left;
+            margin-bottom: 30px;
+            padding-left: 20px;
+            color: #333;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .modal-content li {
+            margin-bottom: 10px;
+        }
+
+        .continue-btn {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.2s;
+        }
+
+        .continue-btn:hover {
+            background-color: #333;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+                overflow: auto;
+            }
+            .left-panel, .right-panel {
+                flex: none;
+                width: 100%;
+                padding: 40px 20px;
+            }
+            .right-panel {
+                min-height: 500px;
+            }
+            .mock-ui {
+                transform: none;
+            }
+            .training-notice {
+                position: relative;
+                top: 0;
+                left: 0;
+                transform: none;
+                margin-bottom: 20px;
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Training Notice -->
+    <div class="training-notice">Cybersecurity Training Simulation – Do not enter real credentials.</div>
+
+    <!-- Left Panel: Login Form -->
+    <div class="left-panel">
+        <div class="logo"></div>
+        <h1>Log on to NetBank</h1>
+
+        <form id="loginForm" onsubmit="event.preventDefault(); showWarning();">
+            <div class="form-group">
+                <label for="username">Client number</label>
+                <input type="text" id="username" name="username" autocomplete="off" placeholder="">
+            </div>
+
+            <div class="form-group password-wrapper">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" autocomplete="off">
+                <button type="button" class="show-password" onclick="togglePassword()">Show</button>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="remember">
+                <label class="checkbox-label" for="remember">
+                    Remember my client number
+                    <span>Don't select this if anyone else uses this device</span>
+                </label>
+            </div>
+
+            <button type="submit" class="login-btn">Log on</button>
+
+            <div class="footer-text">
+                By logging on, you agree to our <a href="#" onclick="return false;">Electronic Banking Terms and Conditions</a><br><br>
+                <a href="#" onclick="return false;">Get help logging on</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Right Panel: Mock UI & Info -->
+    <div class="right-panel">
+        <div class="mock-ui">
+            <div class="mock-header">
+                <div class="mock-logo"></div>
+                <div class="mock-nav">
+                    <span>Accounts</span>
+                    <span>Transfer</span>
+                    <span>Pay</span>
+                    <span>Cards</span>
+                </div>
+            </div>
+            <div class="mock-title">Good morning Sam</div>
+            
+            <div class="mock-row">
+                <span>Smart Access</span>
+                <span class="mock-amount">$2,450.00</span>
+            </div>
+            <div class="mock-row">
+                <span>NetBank Saver</span>
+                <span class="mock-amount">$15,200.50</span>
+            </div>
+            <div class="mock-row">
+                <span>Goal Saver</span>
+                <span class="mock-amount">$5,000.00</span>
+            </div>
+            <div class="mock-row">
+                <span>Credit Card</span>
+                <span class="mock-amount">-$450.00</span>
+            </div>
+
+            <div class="mock-highlight">
+                <span>Pending transaction</span>
+                <span>$120.00</span>
+            </div>
+        </div>
+
+        <div class="right-panel-text">
+            <h2>New look. Same secure logon.</h2>
+            <p>This is the first step to a smarter NetBank. The new experience is rolling out in stages, so you'll see it as it becomes available to you.</p>
+            <a href="#" onclick="return false;">See what's new</a>
+        </div>
+    </div>
+
+    <!-- Warning Modal -->
+    <div class="modal-overlay" id="warningModal">
+        <div class="modal-content">
+            <h2>PHISHING SIMULATION</h2>
+            <p>The information you entered could have been captured and sent to an attacker if this were a real phishing website.</p>
+            <ul>
+                <li>Always check the website address before entering your username or password.</li>
+                <li>Look for the padlock icon in the address bar.</li>
+                <li>Be cautious of urgent or threatening language.</li>
+            </ul>
+            <a href="https://netbank.web.commbank.com.au/auth/logon" class="continue-btn" id="continueBtn">Continue to Official Website</a>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const showBtn = document.querySelector('.show-password');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                showBtn.textContent = 'Hide';
+            } else {
+                passwordInput.type = 'password';
+                showBtn.textContent = 'Show';
+            }
+        }
+
+        // Show warning modal and clear inputs
+        function showWarning() {
+            // SECURITY: Clear the input fields immediately to ensure no data is stored in the DOM
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            
+            // Show the modal
+            document.getElementById('warningModal').style.display = 'flex';
+        }
+
+        // Close modal and redirect to official site (simulated)
+        document.getElementById('continueBtn').addEventListener('click', function(e) {
+            // The href attribute handles the redirect. 
+            // This event listener is just to ensure the modal closes if the user navigates back.
+            document.getElementById('warningModal').style.display = 'none';
+        });
+
+        // Close modal if user clicks outside the content (optional, but good for UX)
+        document.getElementById('warningModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+    </script>
+
+</body>
+</html>
